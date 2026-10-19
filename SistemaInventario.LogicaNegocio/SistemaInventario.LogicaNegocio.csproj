@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(MarcoDotNet)</TargetFramework>
+    <RootNamespace>SistemaInventario.LogicaNegocio</RootNamespace>
+    <AssemblyName>SistemaInventario.LogicaNegocio</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaInventario.AccesoDatos\SistemaInventario.AccesoDatos.csproj" />
+    <ProjectReference Include="..\SistemaInventario.Comun\SistemaInventario.Comun.csproj" />
+    <ProjectReference Include="..\SistemaInventario.Entidades\SistemaInventario.Entidades.csproj" />
+  </ItemGroup>
+
+</Project>

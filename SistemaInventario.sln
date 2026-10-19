@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaInventario.Presentacion", "SistemaInventario.Presentacion\SistemaInventario.Presentacion.csproj", "{340AC454-994C-512E-B284-D14FDDBB890A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaInventario.LogicaNegocio", "SistemaInventario.LogicaNegocio\SistemaInventario.LogicaNegocio.csproj", "{5FFF75C4-0B56-59BA-AEE9-B587D352AD65}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaInventario.AccesoDatos", "SistemaInventario.AccesoDatos\SistemaInventario.AccesoDatos.csproj", "{A39DDE72-B7A9-5363-9D07-891972DBEFC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaInventario.Entidades", "SistemaInventario.Entidades\SistemaInventario.Entidades.csproj", "{5FF5C95E-F9CC-5F5C-851D-0547F7DE7580}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaInventario.Comun", "SistemaInventario.Comun\SistemaInventario.Comun.csproj", "{84EB71D4-4112-52F9-ADFB-483487036395}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaInventario.Pruebas", "SistemaInventario.Pruebas\SistemaInventario.Pruebas.csproj", "{005B7183-9CC1-51A3-80F5-CCD8FC4FB5F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pruebas", "Pruebas", "{0EB84ACD-ADDD-5240-91C6-AC715BD6DDD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{340AC454-994C-512E-B284-D14FDDBB890A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{340AC454-994C-512E-B284-D14FDDBB890A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{340AC454-994C-512E-B284-D14FDDBB890A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{340AC454-994C-512E-B284-D14FDDBB890A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FFF75C4-0B56-59BA-AEE9-B587D352AD65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FFF75C4-0B56-59BA-AEE9-B587D352AD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FFF75C4-0B56-59BA-AEE9-B587D352AD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFF75C4-0B56-59BA-AEE9-B587D352AD65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A39DDE72-B7A9-5363-9D07-891972DBEFC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39DDE72-B7A9-5363-9D07-891972DBEFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39DDE72-B7A9-5363-9D07-891972DBEFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39DDE72-B7A9-5363-9D07-891972DBEFC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FF5C95E-F9CC-5F5C-851D-0547F7DE7580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF5C95E-F9CC-5F5C-851D-0547F7DE7580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF5C95E-F9CC-5F5C-851D-0547F7DE7580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF5C95E-F9CC-5F5C-851D-0547F7DE7580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84EB71D4-4112-52F9-ADFB-483487036395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84EB71D4-4112-52F9-ADFB-483487036395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84EB71D4-4112-52F9-ADFB-483487036395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84EB71D4-4112-52F9-ADFB-483487036395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{005B7183-9CC1-51A3-80F5-CCD8FC4FB5F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{005B7183-9CC1-51A3-80F5-CCD8FC4FB5F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{005B7183-9CC1-51A3-80F5-CCD8FC4FB5F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{005B7183-9CC1-51A3-80F5-CCD8FC4FB5F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{005B7183-9CC1-51A3-80F5-CCD8FC4FB5F2} = {0EB84ACD-ADDD-5240-91C6-AC715BD6DDD4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EABF788A-817D-5F17-929E-810814490CCA}
+	EndGlobalSection
+EndGlobal

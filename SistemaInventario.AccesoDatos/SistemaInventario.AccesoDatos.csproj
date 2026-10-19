@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(MarcoDotNet)</TargetFramework>
+    <RootNamespace>SistemaInventario.AccesoDatos</RootNamespace>
+    <AssemblyName>SistemaInventario.AccesoDatos</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaInventario.Comun\SistemaInventario.Comun.csproj" />
+    <ProjectReference Include="..\SistemaInventario.Entidades\SistemaInventario.Entidades.csproj" />
+  </ItemGroup>
+
+</Project>

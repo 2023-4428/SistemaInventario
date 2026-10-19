@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(MarcoDotNet)-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>SistemaInventario.Presentacion</RootNamespace>
+    <AssemblyName>SistemaInventario</AssemblyName>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <!-- WFO1000: las propiedades públicas de las pantallas (UserControl) no se serializan porque esas pantallas se arman en código. -->
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    La capa de Presentación SOLO referencia a Lógica de Negocio (y a los proyectos compartidos
+    Entidades y Comun). No referencia a Acceso a Datos: así no puede saltarse los servicios.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaInventario.Comun\SistemaInventario.Comun.csproj" />
+    <ProjectReference Include="..\SistemaInventario.Entidades\SistemaInventario.Entidades.csproj" />
+    <ProjectReference Include="..\SistemaInventario.LogicaNegocio\SistemaInventario.LogicaNegocio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

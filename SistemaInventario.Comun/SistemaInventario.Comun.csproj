@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(MarcoDotNet)</TargetFramework>
+    <RootNamespace>SistemaInventario.Comun</RootNamespace>
+    <AssemblyName>SistemaInventario.Comun</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>
