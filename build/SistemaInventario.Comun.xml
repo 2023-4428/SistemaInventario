@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SistemaInventario.Comun</name>
+    </assembly>
+    <members>
+        <member name="T:SistemaInventario.Comun.Excepciones.EntidadNoEncontradaException">
+            <summary>Se lanza cuando se busca un registro por identificador y no existe.</summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.Excepciones.EntidadNoEncontradaException.#ctor(System.String,System.Int32)">
+            <summary>Crea la excepción indicando el tipo de entidad y su identificador.</summary>
+            <param name="entidad">Nombre legible de la entidad (por ejemplo, "categoría").</param>
+            <param name="id">Identificador que no se encontró.</param>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.EntidadNoEncontradaException.Entidad">
+            <summary>Nombre legible de la entidad buscada.</summary>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.EntidadNoEncontradaException.Id">
+            <summary>Identificador que no se encontró.</summary>
+        </member>
+        <member name="T:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException">
+            <summary>
+            Envuelve los errores de SQL Server (<c>SqlException</c>) con un mensaje amigable.
+            Así las capas superiores no dependen del proveedor de datos.
+            </summary>
+        </member>
+        <member name="F:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.ViolacionUnica">
+            <summary>Número de error de SQL Server para violación de restricción UNIQUE.</summary>
+        </member>
+        <member name="F:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.IndiceUnicoDuplicado">
+            <summary>Número de error de SQL Server para índice único duplicado.</summary>
+        </member>
+        <member name="F:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.ViolacionClaveForanea">
+            <summary>Número de error de SQL Server para violación de clave foránea.</summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.#ctor(System.String,System.Exception,System.Nullable{System.Int32})">
+            <summary>Crea la excepción.</summary>
+            <param name="mensaje">Mensaje amigable para el usuario.</param>
+            <param name="excepcionInterna">La excepción original del proveedor de datos.</param>
+            <param name="codigoSql">Número de error de SQL Server, si se conoce.</param>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.CodigoSql">
+            <summary>Número de error de SQL Server (<c>SqlException.Number</c>), si existe.</summary>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.EsViolacionUnica">
+            <summary>Indica si el error corresponde a un valor duplicado en una restricción única.</summary>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException.EsViolacionClaveForanea">
+            <summary>Indica si el error corresponde a una violación de integridad referencial.</summary>
+        </member>
+        <member name="T:SistemaInventario.Comun.Excepciones.ErrorValidacion">
+            <summary>
+            Describe un error de validación asociado a un campo.
+            La interfaz usa <see cref="P:SistemaInventario.Comun.Excepciones.ErrorValidacion.Campo"/> para decidir en qué control mostrar el mensaje con <c>ErrorProvider</c>.
+            </summary>
+            <param name="Campo">Nombre de la propiedad/campo con el error (por ejemplo, "Nombre").</param>
+            <param name="Mensaje">Mensaje legible para el usuario.</param>
+        </member>
+        <member name="M:SistemaInventario.Comun.Excepciones.ErrorValidacion.#ctor(System.String,System.String)">
+            <summary>
+            Describe un error de validación asociado a un campo.
+            La interfaz usa <see cref="P:SistemaInventario.Comun.Excepciones.ErrorValidacion.Campo"/> para decidir en qué control mostrar el mensaje con <c>ErrorProvider</c>.
+            </summary>
+            <param name="Campo">Nombre de la propiedad/campo con el error (por ejemplo, "Nombre").</param>
+            <param name="Mensaje">Mensaje legible para el usuario.</param>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.ErrorValidacion.Campo">
+            <summary>Nombre de la propiedad/campo con el error (por ejemplo, "Nombre").</summary>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.ErrorValidacion.Mensaje">
+            <summary>Mensaje legible para el usuario.</summary>
+        </member>
+        <member name="T:SistemaInventario.Comun.Excepciones.ReglaNegocioException">
+            <summary>
+            Se lanza cuando una operación incumple una regla de negocio
+            (por ejemplo, eliminar una categoría que tiene productos activos).
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.Excepciones.ReglaNegocioException.#ctor(System.String)">
+            <summary>Crea la excepción con un mensaje apto para mostrarse al usuario.</summary>
+            <param name="mensaje">Descripción de la regla incumplida.</param>
+        </member>
+        <member name="T:SistemaInventario.Comun.Excepciones.ValidacionException">
+            <summary>Se lanza cuando los datos de una entidad no cumplen las reglas de validación.</summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.Excepciones.ValidacionException.#ctor(System.Collections.Generic.IReadOnlyList{SistemaInventario.Comun.Excepciones.ErrorValidacion})">
+            <summary>Crea la excepción a partir de una lista de errores.</summary>
+            <param name="errores">Errores detectados (al menos uno).</param>
+        </member>
+        <member name="M:SistemaInventario.Comun.Excepciones.ValidacionException.#ctor(System.String,System.String)">
+            <summary>Crea la excepción para un único error.</summary>
+            <param name="campo">Campo con el error.</param>
+            <param name="mensaje">Mensaje del error.</param>
+        </member>
+        <member name="P:SistemaInventario.Comun.Excepciones.ValidacionException.Errores">
+            <summary>Errores de validación detectados.</summary>
+        </member>
+        <member name="T:SistemaInventario.Comun.ILogger">
+            <summary>
+            Contrato de registro (log) compartido por todas las capas de la solución.
+            Las capas reciben una implementación por constructor (inyección de dependencias),
+            de modo que ninguna depende de una clase concreta de registro.
+            </summary>
+        </member>
+        <member name="P:SistemaInventario.Comun.ILogger.RutaArchivo">
+            <summary>Ruta completa del archivo donde se escriben los registros.</summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.ILogger.Error(System.String,System.Exception)">
+            <summary>Registra un error, opcionalmente con la excepción que lo originó.</summary>
+            <param name="mensaje">Descripción del error.</param>
+            <param name="excepcion">Excepción asociada (puede ser <c>null</c>).</param>
+        </member>
+        <member name="M:SistemaInventario.Comun.ILogger.Advertencia(System.String)">
+            <summary>Registra una advertencia.</summary>
+            <param name="mensaje">Descripción de la advertencia.</param>
+        </member>
+        <member name="M:SistemaInventario.Comun.ILogger.Informacion(System.String)">
+            <summary>Registra un mensaje informativo.</summary>
+            <param name="mensaje">Texto informativo.</param>
+        </member>
+        <member name="T:SistemaInventario.Comun.Logger">
+            <summary>
+            Implementación de <see cref="T:SistemaInventario.Comun.ILogger"/> que escribe los errores en el archivo <c>errores.log</c>.
+            Es segura para uso concurrente y nunca lanza excepciones: si no puede escribir, lo ignora
+            para no interrumpir la aplicación por un problema de registro.
+            </summary>
+        </member>
+        <member name="F:SistemaInventario.Comun.Logger.NombreArchivoPredeterminado">
+            <summary>Nombre del archivo de registro por defecto.</summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.Logger.#ctor">
+            <summary>Crea un logger que escribe junto al ejecutable, en <c>errores.log</c>.</summary>
+        </member>
+        <member name="M:SistemaInventario.Comun.Logger.#ctor(System.String)">
+            <summary>Crea un logger que escribe en la ruta indicada.</summary>
+            <param name="rutaArchivo">Ruta completa del archivo de registro.</param>
+        </member>
+        <member name="P:SistemaInventario.Comun.Logger.RutaArchivo">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.Comun.Logger.Error(System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.Comun.Logger.Advertencia(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.Comun.Logger.Informacion(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.Comun.LoggerNulo">
+            <summary>
+            Implementación de <see cref="T:SistemaInventario.Comun.ILogger"/> que no hace nada (patrón Null Object).
+            Útil en pruebas unitarias y en cualquier contexto donde no se desee registrar.
+            </summary>
+        </member>
+        <member name="P:SistemaInventario.Comun.LoggerNulo.RutaArchivo">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.Comun.LoggerNulo.Error(System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.Comun.LoggerNulo.Advertencia(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.Comun.LoggerNulo.Informacion(System.String)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

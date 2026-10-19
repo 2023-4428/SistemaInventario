@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SistemaInventario.Entidades</name>
+    </assembly>
+    <members>
+        <member name="T:SistemaInventario.Entidades.Categoria">
+            <summary>Categoría que agrupa productos. Puede tener hasta <see cref="F:SistemaInventario.Entidades.Categoria.MaximoFotos"/> fotos.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Categoria.LongitudMinimaNombre">
+            <summary>Longitud mínima permitida para el nombre.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Categoria.LongitudMaximaNombre">
+            <summary>Longitud máxima permitida para el nombre.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Categoria.LongitudMaximaDescripcion">
+            <summary>Longitud máxima permitida para la descripción.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Categoria.MaximoFotos">
+            <summary>Cantidad máxima de fotos asociadas a una categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Categoria.Nombre">
+            <summary>Nombre de la categoría (obligatorio, único, 3 a 100 caracteres).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Categoria.Descripcion">
+            <summary>Descripción de la categoría (obligatoria, máximo 500 caracteres).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Categoria.CantidadFotos">
+            <summary>
+            Cantidad de fotos activas. Es un dato de resumen que se llena al listar categorías,
+            para no cargar los bytes de las imágenes en los listados.
+            </summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Categoria.Fotos">
+            <summary>Fotos de la categoría (solo se cargan al consultar una categoría por su identificador).</summary>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Categoria.AgregarFoto(SistemaInventario.Entidades.FotoCategoria)">
+            <summary>Agrega una foto a la categoría.</summary>
+            <param name="foto">Foto a agregar.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Categoria.QuitarFoto(SistemaInventario.Entidades.FotoCategoria)">
+            <summary>Quita una foto de la categoría.</summary>
+            <param name="foto">Foto a quitar.</param>
+            <returns><c>true</c> si la foto estaba en la categoría.</returns>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Categoria.EstablecerFotos(System.Collections.Generic.IEnumerable{SistemaInventario.Entidades.FotoCategoria})">
+            <summary>Reemplaza todas las fotos por las indicadas.</summary>
+            <param name="nuevasFotos">Conjunto final de fotos de la categoría.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Categoria.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.Entidades.EntidadBase">
+            <summary>
+            Clase base de todas las entidades de dominio. Concentra los campos comunes:
+            identificador, estado de borrado lógico (soft-delete) y fechas de auditoría.
+            </summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.EntidadBase.Id">
+            <summary>Identificador único. Vale 0 mientras la entidad no se ha guardado.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.EntidadBase.Activo">
+            <summary>Indica si el registro está activo (<c>true</c>) o eliminado lógicamente (<c>false</c>).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.EntidadBase.FechaCreacion">
+            <summary>Fecha y hora en que se creó el registro.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.EntidadBase.FechaModificacion">
+            <summary>Fecha y hora de la última modificación (también se actualiza al eliminar o restaurar).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.EntidadBase.EsNueva">
+            <summary>Indica si la entidad todavía no existe en la base de datos.</summary>
+        </member>
+        <member name="T:SistemaInventario.Entidades.FotoCategoria">
+            <summary>Fotografía asociada a una <see cref="T:SistemaInventario.Entidades.Categoria"/>. El contenido se guarda en la base de datos.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.FotoCategoria.CategoriaId">
+            <summary>Identificador de la categoría a la que pertenece la foto.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.FotoCategoria.NombreArchivo">
+            <summary>Nombre original del archivo (incluye la extensión).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.FotoCategoria.Contenido">
+            <summary>Bytes de la imagen.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.FotoCategoria.TamanoBytes">
+            <summary>Tamaño de la imagen en bytes.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.FotoCategoria.Extension">
+            <summary>Extensión del archivo en minúsculas y con punto (por ejemplo, ".png").</summary>
+        </member>
+        <member name="M:SistemaInventario.Entidades.FotoCategoria.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.Entidades.Producto">
+            <summary>Producto del inventario, asociado a una categoría y a un suplidor.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Producto.LongitudMinimaNombre">
+            <summary>Longitud mínima del nombre.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Producto.LongitudMaximaNombre">
+            <summary>Longitud máxima del nombre.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Producto.PrecioMaximo">
+            <summary>Precio máximo permitido (evita desbordar el tipo DECIMAL(18,2) y errores de digitación).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Producto.Nombre">
+            <summary>Nombre del producto (obligatorio).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Producto.PrecioUnitario">
+            <summary>Precio unitario (mayor a 0 y con máximo 2 decimales).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Producto.CategoriaId">
+            <summary>Identificador de la categoría asociada (obligatoria y activa).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Producto.SuplidorId">
+            <summary>Identificador del suplidor asociado (obligatorio y activo).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Producto.CategoriaNombre">
+            <summary>Nombre de la categoría. Dato de solo lectura que se obtiene con un JOIN al consultar.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Producto.SuplidorNombre">
+            <summary>Nombre de la empresa suplidora. Dato de solo lectura que se obtiene con un JOIN al consultar.</summary>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Producto.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.Entidades.Reportes.CategoriaVacia">
+            <summary>Fila del reporte "categorías sin productos activos".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="Descripcion">Descripción de la categoría.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Reportes.CategoriaVacia.#ctor(System.String,System.String)">
+            <summary>Fila del reporte "categorías sin productos activos".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="Descripcion">Descripción de la categoría.</param>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.CategoriaVacia.Categoria">
+            <summary>Nombre de la categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.CategoriaVacia.Descripcion">
+            <summary>Descripción de la categoría.</summary>
+        </member>
+        <member name="T:SistemaInventario.Entidades.Reportes.ConteoCategoria">
+            <summary>Fila del reporte "productos agrupados por categoría con conteo".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="CantidadProductos">Cantidad de productos activos de la categoría.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Reportes.ConteoCategoria.#ctor(System.String,System.Int32)">
+            <summary>Fila del reporte "productos agrupados por categoría con conteo".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="CantidadProductos">Cantidad de productos activos de la categoría.</param>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.ConteoCategoria.Categoria">
+            <summary>Nombre de la categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.ConteoCategoria.CantidadProductos">
+            <summary>Cantidad de productos activos de la categoría.</summary>
+        </member>
+        <member name="T:SistemaInventario.Entidades.Reportes.ProductoDestacado">
+            <summary>Fila del reporte "producto más caro de cada categoría".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="Producto">Nombre del producto más caro.</param>
+            <param name="Precio">Precio unitario del producto.</param>
+            <param name="Suplidor">Nombre de la empresa suplidora.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Reportes.ProductoDestacado.#ctor(System.String,System.String,System.Decimal,System.String)">
+            <summary>Fila del reporte "producto más caro de cada categoría".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="Producto">Nombre del producto más caro.</param>
+            <param name="Precio">Precio unitario del producto.</param>
+            <param name="Suplidor">Nombre de la empresa suplidora.</param>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.ProductoDestacado.Categoria">
+            <summary>Nombre de la categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.ProductoDestacado.Producto">
+            <summary>Nombre del producto más caro.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.ProductoDestacado.Precio">
+            <summary>Precio unitario del producto.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.ProductoDestacado.Suplidor">
+            <summary>Nombre de la empresa suplidora.</summary>
+        </member>
+        <member name="T:SistemaInventario.Entidades.Reportes.PromedioCategoria">
+            <summary>Fila del reporte "promedio de precios por categoría".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="CantidadProductos">Cantidad de productos considerados.</param>
+            <param name="PrecioPromedio">Precio promedio, redondeado a 2 decimales.</param>
+            <param name="PrecioMinimo">Precio más bajo de la categoría.</param>
+            <param name="PrecioMaximo">Precio más alto de la categoría.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Reportes.PromedioCategoria.#ctor(System.String,System.Int32,System.Decimal,System.Decimal,System.Decimal)">
+            <summary>Fila del reporte "promedio de precios por categoría".</summary>
+            <param name="Categoria">Nombre de la categoría.</param>
+            <param name="CantidadProductos">Cantidad de productos considerados.</param>
+            <param name="PrecioPromedio">Precio promedio, redondeado a 2 decimales.</param>
+            <param name="PrecioMinimo">Precio más bajo de la categoría.</param>
+            <param name="PrecioMaximo">Precio más alto de la categoría.</param>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.PromedioCategoria.Categoria">
+            <summary>Nombre de la categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.PromedioCategoria.CantidadProductos">
+            <summary>Cantidad de productos considerados.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.PromedioCategoria.PrecioPromedio">
+            <summary>Precio promedio, redondeado a 2 decimales.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.PromedioCategoria.PrecioMinimo">
+            <summary>Precio más bajo de la categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.PromedioCategoria.PrecioMaximo">
+            <summary>Precio más alto de la categoría.</summary>
+        </member>
+        <member name="T:SistemaInventario.Entidades.Reportes.RankingSuplidor">
+            <summary>Fila del reporte "top de suplidores con más productos".</summary>
+            <param name="Posicion">Posición en el ranking (1 es el mejor).</param>
+            <param name="Suplidor">Nombre de la empresa suplidora.</param>
+            <param name="CantidadProductos">Cantidad de productos activos que suministra.</param>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Reportes.RankingSuplidor.#ctor(System.Int32,System.String,System.Int32)">
+            <summary>Fila del reporte "top de suplidores con más productos".</summary>
+            <param name="Posicion">Posición en el ranking (1 es el mejor).</param>
+            <param name="Suplidor">Nombre de la empresa suplidora.</param>
+            <param name="CantidadProductos">Cantidad de productos activos que suministra.</param>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.RankingSuplidor.Posicion">
+            <summary>Posición en el ranking (1 es el mejor).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.RankingSuplidor.Suplidor">
+            <summary>Nombre de la empresa suplidora.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Reportes.RankingSuplidor.CantidadProductos">
+            <summary>Cantidad de productos activos que suministra.</summary>
+        </member>
+        <member name="T:SistemaInventario.Entidades.Suplidor">
+            <summary>Empresa que suministra productos.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Suplidor.LongitudMinimaNombre">
+            <summary>Longitud mínima del nombre de la empresa y del contacto.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Suplidor.LongitudMaximaEmpresa">
+            <summary>Longitud máxima del nombre de la empresa.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Suplidor.LongitudMaximaContacto">
+            <summary>Longitud máxima del nombre del contacto.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Suplidor.LongitudMaximaCorreo">
+            <summary>Longitud máxima del correo electrónico.</summary>
+        </member>
+        <member name="F:SistemaInventario.Entidades.Suplidor.LongitudMaximaSitioWeb">
+            <summary>Longitud máxima del sitio web.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Suplidor.NombreEmpresa">
+            <summary>Nombre de la empresa (obligatorio y único).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Suplidor.NombreContacto">
+            <summary>Nombre de la persona de contacto (obligatorio).</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Suplidor.Telefono">
+            <summary>Teléfono con formato dominicano: 809/829/849-XXX-XXXX.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Suplidor.Correo">
+            <summary>Correo electrónico de contacto.</summary>
+        </member>
+        <member name="P:SistemaInventario.Entidades.Suplidor.SitioWeb">
+            <summary>Sitio web (opcional). Si se indica debe ser una URL http o https válida.</summary>
+        </member>
+        <member name="M:SistemaInventario.Entidades.Suplidor.ToString">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

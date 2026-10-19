@@ -1,0 +1,20 @@
+2026-10-18 10:12:59 [ERROR] Error de SQL Server (número 208) al listar categoría activos.
+    Excepción: Microsoft.Data.SqlClient.SqlException
+    Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'dbo.Categoria'.
+       at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+       at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+       at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+       at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+       at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+       at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+       at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+       at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean isRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+       at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& executeTask, Boolean& usedCache, Boolean asyncWrite, Boolean isRetry, String method)
+       at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+       at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+       at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader()
+       at SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.LeerLista(SqlCommand comando)
+       at SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.<>c__DisplayClass35_0.<ListarPorEstado>b__0(SqlConnection conexion)
+       at SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Ejecutar[TResultado](String operacion, Func`2 accion)
+    ClientConnectionId:3d222603-8d61-4e2d-87df-eb9bc1858b27
+    Error Number:208,State:1,Class:16

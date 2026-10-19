@@ -1,0 +1,20 @@
+CARPETA /build  -  EJECUTABLE COMPILADO EN RELEASE
+===================================================
+
+Esta carpeta debe contener el ejecutable de la aplicacion compilado en modo Release
+(SistemaInventario.exe y sus archivos). Se genera con UN comando desde la raiz del repositorio:
+
+    publicar-release.bat
+
+El script ejecuta:  dotnet publish ... -c Release -r win-x64 -o build
+(con "publicar-release.bat autocontenido" el resultado incluye el runtime de .NET y corre en
+cualquier Windows sin instalar nada; pesa bastante mas).
+
+Requisitos para ejecutar el .exe publicado (modo normal):
+  * Windows 10/11 (64 bits)
+  * .NET 10 Desktop Runtime  (https://dotnet.microsoft.com/download/dotnet/10.0)
+  * SQL Server / SQL Server Express con la base de datos creada (database\schema.sql y database\datos.sql)
+  * build\appsettings.json con la cadena de conexion correcta de su equipo
+
+Despues de publicar, haga commit de esta carpeta para que quede en el repositorio de GitHub.
+El archivo errores.log que la aplicacion crea al ejecutarse esta excluido por .gitignore.

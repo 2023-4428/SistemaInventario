@@ -1,0 +1,502 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SistemaInventario.LogicaNegocio</name>
+    </assembly>
+    <members>
+        <member name="T:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios">
+            <summary>
+            Raíz de composición de la aplicación: crea el grafo de objetos (repositorios, validadores y servicios)
+            conectándolos mediante inyección por constructor.
+            <para>
+            Existe en la capa de Lógica de Negocio para que la capa de Presentación pueda obtener los servicios
+            sin referenciar jamás a la capa de Acceso a Datos.
+            </para>
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.#ctor(System.String,SistemaInventario.Comun.ILogger)">
+            <summary>Construye todos los servicios de la aplicación.</summary>
+            <param name="cadenaConexion">Cadena de conexión de SQL Server.</param>
+            <param name="logger">Logger compartido por todas las capas.</param>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.Logger">
+            <summary>Logger compartido.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.Categorias">
+            <summary>Servicio de categorías.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.Suplidores">
+            <summary>Servicio de suplidores.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.Productos">
+            <summary>Servicio de productos.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.Reportes">
+            <summary>Servicio de reportes LINQ.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Composicion.ContenedorServicios.ProbarConexion(System.String@)">
+            <summary>Comprueba que la base de datos esté disponible.</summary>
+            <param name="mensajeError">Mensaje de error si la prueba falla; <c>null</c> si tuvo éxito.</param>
+            <returns><c>true</c> si se pudo abrir la conexión.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio">
+            <summary>
+            Reglas de negocio de categorías: nombre único (incluso frente a la Papelera) y
+            prohibición de eliminar categorías con productos activos.
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.#ctor(SistemaInventario.AccesoDatos.Interfaces.ICategoriaRepositorio,SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio,SistemaInventario.LogicaNegocio.Validacion.IValidador{SistemaInventario.Entidades.Categoria},SistemaInventario.LogicaNegocio.Validacion.IValidador{SistemaInventario.Entidades.FotoCategoria})">
+            <summary>Crea el servicio con sus dependencias (inyección por constructor).</summary>
+            <param name="categorias">Repositorio de categorías.</param>
+            <param name="productos">Repositorio de productos (para verificar productos asociados).</param>
+            <param name="validador">Validador de categorías.</param>
+            <param name="validadorFoto">Validador de fotos.</param>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.NombreEntidad">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.CamposBusqueda">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.CampoUnico">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.ValidarFoto(SistemaInventario.Entidades.FotoCategoria)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.Normalizar(SistemaInventario.Entidades.Categoria)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.ValidarReglasDeNegocio(SistemaInventario.Entidades.Categoria,SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.CategoriaServicio.AntesDeEliminar(SistemaInventario.Entidades.Categoria)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.FiltroProducto">
+            <summary>Criterios de filtrado del listado de productos. Un criterio en <c>null</c> no se aplica.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.FiltroProducto.Texto">
+            <summary>Texto de búsqueda parcial (nombre, categoría, suplidor o precio).</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.FiltroProducto.CategoriaId">
+            <summary>Solo productos de esta categoría.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.FiltroProducto.SuplidorId">
+            <summary>Solo productos de este suplidor.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.FiltroProducto.PrecioMinimo">
+            <summary>Precio mínimo (inclusive).</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.FiltroProducto.PrecioMaximo">
+            <summary>Precio máximo (inclusive).</summary>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.ICategoriaServicio">
+            <summary>Servicio de negocio de categorías.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ICategoriaServicio.ValidarFoto(SistemaInventario.Entidades.FotoCategoria)">
+            <summary>Valida una foto (extensión, tamaño y contenido) sin guardarla, para dar respuesta inmediata en la interfaz.</summary>
+            <param name="foto">Foto a validar.</param>
+            <returns>Resultado con los errores encontrados.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.IProductoServicio">
+            <summary>Servicio de negocio de productos.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IProductoServicio.Filtrar(System.Collections.Generic.IEnumerable{SistemaInventario.Entidades.Producto},SistemaInventario.LogicaNegocio.Servicios.FiltroProducto)">
+            <summary>
+            Filtra en memoria una lista de productos por categoría, suplidor, rango de precios y texto.
+            </summary>
+            <param name="fuente">Productos a filtrar.</param>
+            <param name="filtro">Criterios a aplicar.</param>
+            <returns>Productos que cumplen todos los criterios.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio">
+            <summary>Reportes basados en consultas LINQ sobre los productos, categorías y suplidores activos.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio.ProductosAgrupadosPorCategoria">
+            <summary>Productos agrupados por categoría con su conteo (incluye categorías sin productos).</summary>
+            <returns>Una fila por categoría, de mayor a menor cantidad.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio.TopSuplidoresPorProductos(System.Int32)">
+            <summary>Suplidores con más productos.</summary>
+            <param name="cantidad">Cantidad de posiciones a devolver (por defecto, 5).</param>
+            <returns>Ranking de suplidores.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio.ProductosPorRangoDePrecio(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Int32})">
+            <summary>Productos dentro de un rango de precios, opcionalmente filtrados por categoría.</summary>
+            <param name="precioMinimo">Precio mínimo inclusive; <c>null</c> para no limitar.</param>
+            <param name="precioMaximo">Precio máximo inclusive; <c>null</c> para no limitar.</param>
+            <param name="categoriaId">Categoría a filtrar; <c>null</c> para todas.</param>
+            <returns>Productos ordenados por precio.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio.PromedioPreciosPorCategoria">
+            <summary>Promedio, mínimo y máximo de precios por categoría.</summary>
+            <returns>Una fila por categoría con productos.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio.ProductoMasCaroPorCategoria">
+            <summary>El producto más caro de cada categoría.</summary>
+            <returns>Una fila por categoría con productos.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IReporteServicio.CategoriasSinProductos">
+            <summary>Categorías activas que no tienen productos activos.</summary>
+            <returns>Categorías vacías.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.IServicio`1">
+            <summary>
+            Contrato genérico de los servicios de negocio: listados, altas, cambios, borrado lógico y restauración.
+            La capa de presentación solo conoce estas interfaces, nunca los repositorios.
+            </summary>
+            <typeparam name="T">Tipo de entidad que administra el servicio.</typeparam>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.ObtenerActivos">
+            <summary>Obtiene los registros activos.</summary>
+            <returns>Lista de entidades activas.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.ObtenerEliminados">
+            <summary>Obtiene los registros eliminados (Papelera).</summary>
+            <returns>Lista de entidades eliminadas.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.ObtenerPorId(System.Int32)">
+            <summary>Obtiene un registro por su identificador.</summary>
+            <param name="id">Identificador del registro.</param>
+            <returns>La entidad encontrada.</returns>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.EntidadNoEncontradaException">Si no existe.</exception>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.Crear(`0)">
+            <summary>Valida y crea un registro nuevo.</summary>
+            <param name="entidad">Entidad a crear.</param>
+            <returns>Identificador del registro creado.</returns>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ValidacionException">Si los datos no son válidos.</exception>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.Actualizar(`0)">
+            <summary>Valida y actualiza un registro existente.</summary>
+            <param name="entidad">Entidad con los valores nuevos.</param>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ValidacionException">Si los datos no son válidos.</exception>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ReglaNegocioException">Si el registro está eliminado.</exception>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.Eliminar(System.Int32)">
+            <summary>Elimina lógicamente un registro (lo envía a la Papelera).</summary>
+            <param name="id">Identificador del registro.</param>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ReglaNegocioException">Si incumple una regla de negocio.</exception>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.Restaurar(System.Int32)">
+            <summary>Restaura un registro que está en la Papelera.</summary>
+            <param name="id">Identificador del registro.</param>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ReglaNegocioException">Si incumple una regla de negocio.</exception>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.IServicio`1.Buscar(System.Collections.Generic.IEnumerable{`0},System.String)">
+            <summary>
+            Filtra en memoria una lista ya cargada por coincidencia parcial (sin distinguir mayúsculas ni acentos).
+            Se usa para el filtrado en tiempo real de los listados sin volver a consultar la base de datos.
+            </summary>
+            <param name="fuente">Registros a filtrar.</param>
+            <param name="texto">Texto buscado; vacío devuelve todos.</param>
+            <returns>Registros que coinciden.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.ISuplidorServicio">
+            <summary>Servicio de negocio de suplidores.</summary>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio">
+            <summary>
+            Reglas de negocio de productos: la categoría y el suplidor deben existir y estar activos, tanto al
+            guardar como al restaurar un producto desde la Papelera.
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.#ctor(SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio,SistemaInventario.AccesoDatos.Interfaces.ICategoriaRepositorio,SistemaInventario.AccesoDatos.Interfaces.ISuplidorRepositorio,SistemaInventario.LogicaNegocio.Validacion.IValidador{SistemaInventario.Entidades.Producto})">
+            <summary>Crea el servicio con sus dependencias (inyección por constructor).</summary>
+            <param name="productos">Repositorio de productos.</param>
+            <param name="categorias">Repositorio de categorías (para verificar que la categoría esté activa).</param>
+            <param name="suplidores">Repositorio de suplidores (para verificar que el suplidor esté activo).</param>
+            <param name="validador">Validador de productos.</param>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.NombreEntidad">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.CamposBusqueda">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.Filtrar(System.Collections.Generic.IEnumerable{SistemaInventario.Entidades.Producto},SistemaInventario.LogicaNegocio.Servicios.FiltroProducto)">
+            <summary>
+            Consulta LINQ: aplica de forma acumulativa los filtros de categoría, suplidor y rango de precios,
+            y luego la búsqueda parcial por texto.
+            </summary>
+            <param name="fuente">Productos a filtrar.</param>
+            <param name="filtro">Criterios a aplicar.</param>
+            <returns>Productos que cumplen todos los criterios.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.Normalizar(SistemaInventario.Entidades.Producto)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.ValidarReglasDeNegocio(SistemaInventario.Entidades.Producto,SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ProductoServicio.AntesDeRestaurar(SistemaInventario.Entidades.Producto)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio">
+            <summary>
+            Implementa los reportes con consultas LINQ no triviales
+            (join/group join, agrupaciones, agregados, ordenamientos compuestos y paginación con <c>Take</c>).
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.#ctor(SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio,SistemaInventario.AccesoDatos.Interfaces.ICategoriaRepositorio,SistemaInventario.AccesoDatos.Interfaces.ISuplidorRepositorio)">
+            <summary>Crea el servicio con sus dependencias (inyección por constructor).</summary>
+            <param name="productos">Repositorio de productos.</param>
+            <param name="categorias">Repositorio de categorías.</param>
+            <param name="suplidores">Repositorio de suplidores.</param>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.ProductosAgrupadosPorCategoria">
+            <summary>
+            LINQ #1 — Productos agrupados por categoría con conteo.
+            Usa <c>join ... into</c> (group join) para incluir también las categorías sin productos.
+            </summary>
+            <returns>Una fila por categoría, de mayor a menor cantidad.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.TopSuplidoresPorProductos(System.Int32)">
+            <summary>
+            LINQ #2 — Top N suplidores con más productos.
+            Usa <c>GroupJoin</c>, ordenamiento compuesto (cantidad descendente y nombre), <c>Take</c> y un
+            <c>Select</c> con índice para numerar la posición.
+            </summary>
+            <param name="cantidad">Cantidad de posiciones a devolver.</param>
+            <returns>Ranking de suplidores.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.ProductosPorRangoDePrecio(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Int32})">
+            <summary>
+            LINQ #3 — Productos en un rango de precios filtrados por categoría.
+            La consulta se compone de forma dinámica según los criterios recibidos.
+            </summary>
+            <param name="precioMinimo">Precio mínimo inclusive; <c>null</c> para no limitar.</param>
+            <param name="precioMaximo">Precio máximo inclusive; <c>null</c> para no limitar.</param>
+            <param name="categoriaId">Categoría a filtrar; <c>null</c> para todas.</param>
+            <returns>Productos ordenados por precio.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.PromedioPreciosPorCategoria">
+            <summary>
+            LINQ #5 — Promedio de precios por categoría.
+            Agrupa por una clave compuesta (anónima) y calcula Count, Average, Min y Max.
+            </summary>
+            <returns>Una fila por categoría con productos.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.ProductoMasCaroPorCategoria">
+            <summary>
+            LINQ #6 — El producto más caro de cada categoría.
+            Agrupa por categoría y toma el primer elemento de cada grupo ordenado por precio descendente.
+            </summary>
+            <returns>Una fila por categoría con productos.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ReporteServicio.CategoriasSinProductos">
+            <summary>
+            LINQ #7 — Categorías sin productos activos.
+            Usa <c>GroupJoin</c> y filtra los grupos vacíos (equivalente a un LEFT JOIN con IS NULL).
+            </summary>
+            <returns>Categorías vacías ordenadas por nombre.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1">
+            <summary>
+            Servicio genérico (patrón <i>Template Method</i>): implementa el flujo común de validar, guardar,
+            eliminar y restaurar. Los servicios concretos personalizan el comportamiento con los métodos virtuales.
+            </summary>
+            <typeparam name="T">Tipo de entidad administrada.</typeparam>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.#ctor(SistemaInventario.AccesoDatos.Interfaces.IRepositorio{`0},SistemaInventario.LogicaNegocio.Validacion.IValidador{`0})">
+            <summary>Inicializa el servicio con sus dependencias (inyección por constructor).</summary>
+            <param name="repositorio">Repositorio de la entidad.</param>
+            <param name="validador">Validador de la entidad.</param>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.NombreEntidad">
+            <summary>Nombre legible de la entidad, en minúsculas, para los mensajes ("categoría").</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.CamposBusqueda">
+            <summary>Selectores de los textos sobre los que se busca en los listados.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.CampoUnico">
+            <summary>Campo con restricción de unicidad (para traducir errores de duplicado); vacío si no hay.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.ObtenerActivos">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.ObtenerEliminados">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.ObtenerPorId(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.Crear(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.Actualizar(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.Eliminar(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.Restaurar(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.Buscar(System.Collections.Generic.IEnumerable{`0},System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.Normalizar(`0)">
+            <summary>Normaliza los datos antes de validar (por ejemplo, recorta espacios).</summary>
+            <param name="entidad">Entidad a normalizar.</param>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.ValidarReglasDeNegocio(`0,SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion)">
+            <summary>Agrega al resultado los errores de reglas que requieren consultar la base de datos.</summary>
+            <param name="entidad">Entidad que se está guardando.</param>
+            <param name="resultado">Resultado de la validación de formato, al que se pueden agregar errores.</param>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.AntesDeEliminar(`0)">
+            <summary>Verifica las reglas que se deben cumplir antes de eliminar; lanza <see cref="T:SistemaInventario.Comun.Excepciones.ReglaNegocioException"/> si no.</summary>
+            <param name="entidad">Entidad que se va a eliminar.</param>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.ServicioBase`1.AntesDeRestaurar(`0)">
+            <summary>Verifica las reglas que se deben cumplir antes de restaurar; lanza <see cref="T:SistemaInventario.Comun.Excepciones.ReglaNegocioException"/> si no.</summary>
+            <param name="entidad">Entidad que se va a restaurar.</param>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio">
+            <summary>
+            Reglas de negocio de suplidores: nombre de empresa único (incluso frente a la Papelera) y
+            prohibición de eliminar suplidores con productos activos.
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.#ctor(SistemaInventario.AccesoDatos.Interfaces.ISuplidorRepositorio,SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio,SistemaInventario.LogicaNegocio.Validacion.IValidador{SistemaInventario.Entidades.Suplidor})">
+            <summary>Crea el servicio con sus dependencias (inyección por constructor).</summary>
+            <param name="suplidores">Repositorio de suplidores.</param>
+            <param name="productos">Repositorio de productos (para verificar productos asociados).</param>
+            <param name="validador">Validador de suplidores.</param>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.NombreEntidad">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.CamposBusqueda">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.CampoUnico">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.Normalizar(SistemaInventario.Entidades.Suplidor)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.ValidarReglasDeNegocio(SistemaInventario.Entidades.Suplidor,SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Servicios.SuplidorServicio.AntesDeEliminar(SistemaInventario.Entidades.Suplidor)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Utilidades.ExtensionesBusqueda">
+            <summary>
+            Búsqueda parcial genérica, reutilizada por todos los listados (método genérico propio).
+            Ignora mayúsculas/minúsculas y acentos, y admite varias palabras (todas deben coincidir).
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Utilidades.ExtensionesBusqueda.Normalizar(System.String)">
+            <summary>Convierte un texto a minúsculas y sin acentos para poder compararlo.</summary>
+            <param name="texto">Texto original (puede ser <c>null</c>).</param>
+            <returns>Texto normalizado; cadena vacía si no hay contenido.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Utilidades.ExtensionesBusqueda.Buscar``1(System.Collections.Generic.IEnumerable{``0},System.String,System.Func{``0,System.String}[])">
+            <summary>
+            Filtra una secuencia por coincidencia parcial del texto en cualquiera de los campos indicados.
+            </summary>
+            <typeparam name="T">Tipo de los elementos.</typeparam>
+            <param name="fuente">Elementos a filtrar.</param>
+            <param name="texto">Texto buscado; si está vacío se devuelven todos los elementos.</param>
+            <param name="campos">Selectores que devuelven los textos donde se busca.</param>
+            <returns>Lista con los elementos que coinciden.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.IValidador`1">
+            <summary>Contrato genérico de un validador de entidades.</summary>
+            <typeparam name="T">Tipo de entidad que valida.</typeparam>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.IValidador`1.Validar(`0)">
+            <summary>Valida los campos de la entidad aplicando las reglas del dominio.</summary>
+            <param name="entidad">Entidad a validar.</param>
+            <returns>Resultado con los errores encontrados (vacío si es válida).</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion">
+            <summary>Expresiones regulares y comprobaciones reutilizables por los validadores.</summary>
+        </member>
+        <member name="F:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion.Telefono">
+            <summary>Teléfono dominicano: 809, 829 o 849 seguido de XXX-XXXX.</summary>
+        </member>
+        <member name="F:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion.Correo">
+            <summary>Correo electrónico con formato usuario@dominio.ext.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion.EsTelefonoValido(System.String)">
+            <summary>Comprueba el formato de un teléfono dominicano.</summary>
+            <param name="valor">Texto a comprobar.</param>
+            <returns><c>true</c> si cumple el formato.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion.EsCorreoValido(System.String)">
+            <summary>Comprueba el formato de un correo electrónico.</summary>
+            <param name="valor">Texto a comprobar.</param>
+            <returns><c>true</c> si cumple el formato.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion.EsUrlValida(System.String)">
+            <summary>Comprueba que el texto sea una URL absoluta http o https con host.</summary>
+            <param name="valor">Texto a comprobar.</param>
+            <returns><c>true</c> si es una URL válida.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.PatronesValidacion.TieneMaximoDosDecimales(System.Decimal)">
+            <summary>Comprueba que un decimal tenga como máximo dos cifras decimales.</summary>
+            <param name="valor">Valor a comprobar.</param>
+            <returns><c>true</c> si tiene 2 decimales o menos.</returns>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion">
+            <summary>Acumula los errores de validación encontrados en una entidad.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion.EsValido">
+            <summary>Indica si no se encontró ningún error.</summary>
+        </member>
+        <member name="P:SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion.Errores">
+            <summary>Errores encontrados.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion.Agregar(System.String,System.String)">
+            <summary>Agrega un error asociado a un campo.</summary>
+            <param name="campo">Nombre del campo (propiedad) con el error.</param>
+            <param name="mensaje">Mensaje para el usuario.</param>
+            <returns>El mismo resultado, para encadenar llamadas.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion.TieneErroresEn(System.String)">
+            <summary>Indica si ya existe algún error para el campo dado.</summary>
+            <param name="campo">Nombre del campo.</param>
+            <returns><c>true</c> si el campo tiene al menos un error.</returns>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ResultadoValidacion.LanzarSiHayErrores">
+            <summary>Lanza <see cref="T:SistemaInventario.Comun.Excepciones.ValidacionException"/> si hay errores.</summary>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ValidacionException">Cuando existe al menos un error.</exception>
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.ValidadorCategoria">
+            <summary>Valida los campos de una <see cref="T:SistemaInventario.Entidades.Categoria"/> y de sus fotos.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ValidadorCategoria.#ctor(SistemaInventario.LogicaNegocio.Validacion.IValidador{SistemaInventario.Entidades.FotoCategoria})">
+            <summary>Crea el validador con el validador de fotos (inyección por constructor).</summary>
+            <param name="validadorFoto">Validador aplicado a cada foto.</param>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ValidadorCategoria.Validar(SistemaInventario.Entidades.Categoria)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.ValidadorFoto">
+            <summary>Valida las fotos de categorías: extensión .jpg/.jpeg/.png, máximo 2 MB y contenido real de imagen.</summary>
+        </member>
+        <member name="F:SistemaInventario.LogicaNegocio.Validacion.ValidadorFoto.TamanoMaximoBytes">
+            <summary>Tamaño máximo permitido por foto: 2 MB.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ValidadorFoto.Validar(SistemaInventario.Entidades.FotoCategoria)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.ValidadorProducto">
+            <summary>Valida los campos de un <see cref="T:SistemaInventario.Entidades.Producto"/>: nombre, precio (&gt; 0, 2 decimales) y referencias.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ValidadorProducto.Validar(SistemaInventario.Entidades.Producto)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.LogicaNegocio.Validacion.ValidadorSuplidor">
+            <summary>Valida los campos de un <see cref="T:SistemaInventario.Entidades.Suplidor"/>: nombres, teléfono dominicano, correo y sitio web.</summary>
+        </member>
+        <member name="M:SistemaInventario.LogicaNegocio.Validacion.ValidadorSuplidor.Validar(SistemaInventario.Entidades.Suplidor)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,421 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SistemaInventario.AccesoDatos</name>
+    </assembly>
+    <members>
+        <member name="T:SistemaInventario.AccesoDatos.ConexionBD">
+            <summary>
+            Patrón <b>Singleton</b> para el acceso a la base de datos.
+            <para>
+            Existe una única instancia en toda la aplicación (<see cref="P:SistemaInventario.AccesoDatos.ConexionBD.Instancia"/>) que centraliza la
+            cadena de conexión y fabrica las conexiones. Cada llamada a <see cref="M:SistemaInventario.AccesoDatos.ConexionBD.CrearConexion"/> devuelve una
+            <see cref="T:Microsoft.Data.SqlClient.SqlConnection"/> nueva y de vida corta: ADO.NET las reutiliza internamente mediante su
+            pool de conexiones, lo que evita problemas de concurrencia y de lectores abiertos que aparecen al
+            compartir una sola conexión física entre todas las operaciones.
+            </para>
+            </summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.ConexionBD.Instancia">
+            <summary>Única instancia de la clase (creación perezosa y segura entre hilos).</summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.ConexionBD.EstaConfigurada">
+            <summary>Indica si ya se estableció la cadena de conexión.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.ConexionBD.Configurar(System.String)">
+            <summary>Establece la cadena de conexión que usarán todos los repositorios.</summary>
+            <param name="cadena">Cadena de conexión de SQL Server.</param>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.ConexionBD.CrearConexion">
+            <summary>Crea una conexión nueva (cerrada) con la cadena configurada. Quien la reciba debe liberarla.</summary>
+            <returns>Una <see cref="T:Microsoft.Data.SqlClient.SqlConnection"/> lista para abrirse.</returns>
+            <exception cref="T:System.InvalidOperationException">Si todavía no se llamó a <see cref="M:SistemaInventario.AccesoDatos.ConexionBD.Configurar(System.String)"/>.</exception>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.ConexionBD.ProbarConexion(System.String@)">
+            <summary>Intenta abrir una conexión para comprobar que la base de datos está disponible.</summary>
+            <param name="mensajeError">Mensaje del error si la prueba falla; <c>null</c> si tuvo éxito.</param>
+            <returns><c>true</c> si la conexión se abrió correctamente.</returns>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Extensiones.ComandoExtensiones">
+            <summary>Métodos de extensión para crear parámetros SQL tipados (evitan <c>AddWithValue</c>).</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.ComandoExtensiones.AgregarParametro(Microsoft.Data.SqlClient.SqlCommand,System.String,System.Data.SqlDbType,System.Object,System.Int32)">
+            <summary>Agrega un parámetro con tipo explícito. Un valor <c>null</c> se envía como <c>DBNull</c>.</summary>
+            <param name="comando">Comando al que se agrega el parámetro.</param>
+            <param name="nombre">Nombre del parámetro (incluye la arroba).</param>
+            <param name="tipo">Tipo SQL del parámetro.</param>
+            <param name="valor">Valor del parámetro.</param>
+            <param name="tamano">Tamaño del parámetro; -1 para MAX; 0 si no aplica.</param>
+            <returns>El parámetro agregado.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.ComandoExtensiones.AgregarParametroDecimal(Microsoft.Data.SqlClient.SqlCommand,System.String,System.Decimal,System.Byte,System.Byte)">
+            <summary>Agrega un parámetro <c>DECIMAL</c> con precisión y escala explícitas.</summary>
+            <param name="comando">Comando al que se agrega el parámetro.</param>
+            <param name="nombre">Nombre del parámetro (incluye la arroba).</param>
+            <param name="valor">Valor decimal.</param>
+            <param name="precision">Cantidad total de dígitos.</param>
+            <param name="escala">Cantidad de decimales.</param>
+            <returns>El parámetro agregado.</returns>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones">
+            <summary>Métodos de extensión para leer columnas por nombre de un <see cref="T:Microsoft.Data.SqlClient.SqlDataReader"/>.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerEntero(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna entera.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerTexto(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna de texto; un <c>NULL</c> se devuelve como cadena vacía.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerTextoNulo(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna de texto que admite <c>NULL</c>.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerDecimal(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna decimal.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerBooleano(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna booleana (<c>BIT</c>).</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerFecha(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna de fecha y hora.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Extensiones.LectorExtensiones.LeerBytes(Microsoft.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>Lee una columna binaria; un <c>NULL</c> se devuelve como arreglo vacío.</summary>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Interfaces.ICategoriaRepositorio">
+            <summary>Repositorio de categorías (incluye la persistencia de sus fotos).</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.ICategoriaRepositorio.ExisteNombre(System.String,System.Int32)">
+            <summary>Indica si existe otra categoría (activa o eliminada) con el mismo nombre.</summary>
+            <param name="nombre">Nombre a buscar.</param>
+            <param name="excluirId">Identificador a excluir de la búsqueda (0 al crear).</param>
+            <returns><c>true</c> si el nombre ya está en uso.</returns>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio">
+            <summary>Repositorio de productos.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio.ContarActivosPorCategoria(System.Int32)">
+            <summary>Cuenta los productos activos de una categoría.</summary>
+            <param name="categoriaId">Identificador de la categoría.</param>
+            <returns>Cantidad de productos activos.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IProductoRepositorio.ContarActivosPorSuplidor(System.Int32)">
+            <summary>Cuenta los productos activos de un suplidor.</summary>
+            <param name="suplidorId">Identificador del suplidor.</param>
+            <returns>Cantidad de productos activos.</returns>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1">
+            <summary>
+            Patrón <b>Repository</b> genérico: operaciones CRUD con borrado lógico (soft-delete)
+            comunes a todas las entidades.
+            </summary>
+            <typeparam name="T">Tipo de entidad administrada por el repositorio.</typeparam>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.ObtenerActivos">
+            <summary>Obtiene los registros activos (no eliminados).</summary>
+            <returns>Lista de solo lectura de entidades activas.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.ObtenerEliminados">
+            <summary>Obtiene los registros eliminados lógicamente (contenido de la Papelera).</summary>
+            <returns>Lista de solo lectura de entidades eliminadas.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.ObtenerPorId(System.Int32)">
+            <summary>Obtiene un registro por su identificador, esté activo o no.</summary>
+            <param name="id">Identificador del registro.</param>
+            <returns>La entidad, o <c>null</c> si no existe.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.ExisteActivo(System.Int32)">
+            <summary>Indica si existe un registro activo con el identificador dado.</summary>
+            <param name="id">Identificador a verificar.</param>
+            <returns><c>true</c> si existe y está activo.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.Insertar(`0)">
+            <summary>Inserta un registro nuevo y asigna su identificador a la entidad.</summary>
+            <param name="entidad">Entidad a insertar.</param>
+            <returns>Identificador generado.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.Actualizar(`0)">
+            <summary>Actualiza los datos de un registro existente.</summary>
+            <param name="entidad">Entidad con los valores nuevos.</param>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.EliminarLogico(System.Int32)">
+            <summary>Marca un registro como eliminado (<c>Activo = 0</c>) sin borrarlo físicamente.</summary>
+            <param name="id">Identificador del registro.</param>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1.Restaurar(System.Int32)">
+            <summary>Restaura un registro eliminado lógicamente (<c>Activo = 1</c>).</summary>
+            <param name="id">Identificador del registro.</param>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Interfaces.ISuplidorRepositorio">
+            <summary>Repositorio de suplidores.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Interfaces.ISuplidorRepositorio.ExisteNombreEmpresa(System.String,System.Int32)">
+            <summary>Indica si existe otro suplidor (activo o eliminado) con el mismo nombre de empresa.</summary>
+            <param name="nombreEmpresa">Nombre de empresa a buscar.</param>
+            <param name="excluirId">Identificador a excluir de la búsqueda (0 al crear).</param>
+            <returns><c>true</c> si el nombre ya está en uso.</returns>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio">
+            <summary>
+            Repositorio de categorías. Persiste la categoría y sus fotos como una unidad:
+            crear o actualizar guarda ambas dentro de una misma transacción.
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.#ctor(SistemaInventario.AccesoDatos.ConexionBD,SistemaInventario.Comun.ILogger)">
+            <summary>Crea el repositorio con sus dependencias.</summary>
+            <param name="conexionBD">Singleton de conexión.</param>
+            <param name="registro">Logger de errores.</param>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.NombreTabla">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.NombreEntidad">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.ClausulaOrden">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.SqlSeleccion">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.SqlInsertar">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.SqlActualizar">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.Mapear(Microsoft.Data.SqlClient.SqlDataReader)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.AsignarParametros(Microsoft.Data.SqlClient.SqlCommand,SistemaInventario.Entidades.Categoria)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.ObtenerPorId(System.Int32)">
+            <summary>Obtiene la categoría por identificador, incluyendo sus fotos activas.</summary>
+            <param name="id">Identificador de la categoría.</param>
+            <returns>La categoría con sus fotos, o <c>null</c> si no existe.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.Insertar(SistemaInventario.Entidades.Categoria)">
+            <summary>Inserta la categoría y sus fotos en una sola transacción.</summary>
+            <param name="entidad">Categoría a insertar.</param>
+            <returns>Identificador generado.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.Actualizar(SistemaInventario.Entidades.Categoria)">
+            <summary>Actualiza la categoría y sincroniza sus fotos en una sola transacción.</summary>
+            <param name="entidad">Categoría con los valores y el conjunto final de fotos.</param>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.ExisteNombre(System.String,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.CategoriaRepositorio.SincronizarFotos(Microsoft.Data.SqlClient.SqlConnection,Microsoft.Data.SqlClient.SqlTransaction,SistemaInventario.Entidades.Categoria)">
+            <summary>
+            Deja las fotos en la base de datos iguales al conjunto indicado: las fotos que ya no están se
+            desactivan (borrado lógico) y las nuevas (Id = 0) se insertan.
+            </summary>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio">
+            <summary>
+            Repositorio de productos. Sus consultas incluyen (con JOIN) el nombre de la categoría
+            y del suplidor, aunque estén eliminados, para poder mostrar la Papelera completa.
+            </summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.#ctor(SistemaInventario.AccesoDatos.ConexionBD,SistemaInventario.Comun.ILogger)">
+            <summary>Crea el repositorio con sus dependencias.</summary>
+            <param name="conexionBD">Singleton de conexión.</param>
+            <param name="registro">Logger de errores.</param>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.NombreTabla">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.NombreEntidad">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.ClausulaOrden">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.SqlSeleccion">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.SqlInsertar">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.SqlActualizar">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.Mapear(Microsoft.Data.SqlClient.SqlDataReader)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.AsignarParametros(Microsoft.Data.SqlClient.SqlCommand,SistemaInventario.Entidades.Producto)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.ContarActivosPorCategoria(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.ProductoRepositorio.ContarActivosPorSuplidor(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1">
+            <summary>
+            Implementación genérica de <see cref="T:SistemaInventario.AccesoDatos.Interfaces.IRepositorio`1"/> (patrón <i>Template Method</i>).
+            Implementa el CRUD y el borrado lógico una sola vez; cada repositorio concreto solo aporta
+            el SQL propio de su tabla y la forma de mapear filas y parámetros.
+            <para>
+            Toda llamada a la base de datos pasa por <see cref="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Ejecutar``1(System.String,System.Func{Microsoft.Data.SqlClient.SqlConnection,``0})"/>, que captura
+            <see cref="T:Microsoft.Data.SqlClient.SqlException"/>, la registra en el log y la convierte en <see cref="T:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException"/>.
+            </para>
+            </summary>
+            <typeparam name="T">Tipo de entidad administrada.</typeparam>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.#ctor(SistemaInventario.AccesoDatos.ConexionBD,SistemaInventario.Comun.ILogger)">
+            <summary>Inicializa el repositorio con sus dependencias (inyección por constructor).</summary>
+            <param name="conexionBD">Singleton que fabrica las conexiones.</param>
+            <param name="registro">Logger donde se escriben los errores.</param>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.NombreTabla">
+            <summary>Nombre de la tabla (sin esquema; se usa <c>dbo</c>).</summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.NombreEntidad">
+            <summary>Nombre legible de la entidad, en minúsculas, para los mensajes ("categoría").</summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.SqlSeleccion">
+            <summary>Sentencia SELECT completa sin WHERE; la tabla principal debe llevar el alias <c>t</c>.</summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ClausulaOrden">
+            <summary>Expresión ORDER BY (sin la palabra clave) para los listados.</summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.SqlInsertar">
+            <summary>Sentencia INSERT que devuelve el identificador con <c>OUTPUT INSERTED.Id</c>.</summary>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.SqlActualizar">
+            <summary>Sentencia UPDATE con la condición <c>WHERE Id = @Id</c>.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Mapear(Microsoft.Data.SqlClient.SqlDataReader)">
+            <summary>Convierte la fila actual del lector en una entidad.</summary>
+            <param name="lector">Lector posicionado en una fila.</param>
+            <returns>La entidad construida.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.AsignarParametros(Microsoft.Data.SqlClient.SqlCommand,`0)">
+            <summary>Agrega al comando los parámetros de las columnas de negocio (sin <c>@Id</c>).</summary>
+            <param name="comando">Comando de INSERT o UPDATE.</param>
+            <param name="entidad">Entidad con los valores.</param>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Registro">
+            <summary>Logger del repositorio.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ObtenerActivos">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ObtenerEliminados">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ObtenerPorId(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ExisteActivo(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Insertar(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Actualizar(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.EliminarLogico(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Restaurar(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Ejecutar``1(System.String,System.Func{Microsoft.Data.SqlClient.SqlConnection,``0})">
+            <summary>
+            Ejecuta una acción con una conexión abierta, capturando <see cref="T:Microsoft.Data.SqlClient.SqlException"/>.
+            Es el único punto de entrada a la base de datos de los repositorios.
+            </summary>
+            <typeparam name="TResultado">Tipo del valor que devuelve la acción.</typeparam>
+            <param name="operacion">Descripción de la operación, usada en mensajes y en el log.</param>
+            <param name="accion">Acción a ejecutar con la conexión abierta.</param>
+            <returns>El resultado de la acción.</returns>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.ErrorBaseDatosException">Si SQL Server devuelve un error.</exception>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.EjecutarSinResultado(System.String,System.Action{Microsoft.Data.SqlClient.SqlConnection})">
+            <summary>Variante de <see cref="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.Ejecutar``1(System.String,System.Func{Microsoft.Data.SqlClient.SqlConnection,``0})"/> para acciones que no devuelven valor.</summary>
+            <param name="operacion">Descripción de la operación.</param>
+            <param name="accion">Acción a ejecutar con la conexión abierta.</param>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.EjecutarEnTransaccion``1(System.String,System.Func{Microsoft.Data.SqlClient.SqlConnection,Microsoft.Data.SqlClient.SqlTransaction,``0})">
+            <summary>
+            Ejecuta una acción dentro de una transacción: confirma si termina bien y revierte si falla.
+            </summary>
+            <typeparam name="TResultado">Tipo del valor que devuelve la acción.</typeparam>
+            <param name="operacion">Descripción de la operación.</param>
+            <param name="accion">Acción que recibe la conexión y la transacción.</param>
+            <returns>El resultado de la acción.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.InsertarEn(Microsoft.Data.SqlClient.SqlConnection,Microsoft.Data.SqlClient.SqlTransaction,`0)">
+            <summary>Inserta la entidad usando una conexión (y transacción) ya abiertas.</summary>
+            <param name="conexion">Conexión abierta.</param>
+            <param name="transaccion">Transacción en curso, o <c>null</c>.</param>
+            <param name="entidad">Entidad a insertar.</param>
+            <returns>Identificador generado.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ActualizarEn(Microsoft.Data.SqlClient.SqlConnection,Microsoft.Data.SqlClient.SqlTransaction,`0)">
+            <summary>Actualiza la entidad usando una conexión (y transacción) ya abiertas.</summary>
+            <param name="conexion">Conexión abierta.</param>
+            <param name="transaccion">Transacción en curso, o <c>null</c>.</param>
+            <param name="entidad">Entidad con los valores nuevos.</param>
+            <exception cref="T:SistemaInventario.Comun.Excepciones.EntidadNoEncontradaException">Si el registro no existe.</exception>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.LeerLista(Microsoft.Data.SqlClient.SqlCommand)">
+            <summary>Lee todas las filas del comando y las convierte en entidades.</summary>
+            <param name="comando">Comando con la consulta.</param>
+            <returns>Lista de entidades.</returns>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.MapearCamposBase(Microsoft.Data.SqlClient.SqlDataReader,SistemaInventario.Entidades.EntidadBase)">
+            <summary>Asigna los campos comunes (identificador, estado y fechas) a la entidad.</summary>
+            <param name="lector">Lector posicionado en una fila con las columnas comunes.</param>
+            <param name="entidad">Entidad a completar.</param>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.RepositorioBase`1.ExisteValor(System.String,System.String,System.Int32,System.Int32)">
+            <summary>Indica si ya existe un registro con el mismo valor en una columna única.</summary>
+            <param name="columna">Nombre de la columna (valor fijo definido en el código, nunca del usuario).</param>
+            <param name="valor">Valor a buscar.</param>
+            <param name="tamano">Tamaño de la columna NVARCHAR.</param>
+            <param name="excluirId">Identificador a excluir (0 al crear).</param>
+            <returns><c>true</c> si el valor ya existe en otro registro.</returns>
+        </member>
+        <member name="T:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio">
+            <summary>Repositorio de suplidores.</summary>
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.#ctor(SistemaInventario.AccesoDatos.ConexionBD,SistemaInventario.Comun.ILogger)">
+            <summary>Crea el repositorio con sus dependencias.</summary>
+            <param name="conexionBD">Singleton de conexión.</param>
+            <param name="registro">Logger de errores.</param>
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.NombreTabla">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.NombreEntidad">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.ClausulaOrden">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.SqlSeleccion">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.SqlInsertar">
+            <inheritdoc />
+        </member>
+        <member name="P:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.SqlActualizar">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.Mapear(Microsoft.Data.SqlClient.SqlDataReader)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.AsignarParametros(Microsoft.Data.SqlClient.SqlCommand,SistemaInventario.Entidades.Suplidor)">
+            <inheritdoc />
+        </member>
+        <member name="M:SistemaInventario.AccesoDatos.Repositorios.SuplidorRepositorio.ExisteNombreEmpresa(System.String,System.Int32)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
